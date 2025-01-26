@@ -23,7 +23,7 @@ def Transform_router_sales_Low_data():
 
 
 def Transform_aggregator_sales_data():
-    query = """select month(sale_date) ,year(sale_date),sum(price*quantity) as total_sales from filtered_sales_data group by month(sale_date),year(sale_date);"""
+    query = """select product_id,month(sale_date) as month ,year(sale_date) as year,sum(price*quantity) as total_sales from filtered_sales_data group by product_id,month(sale_date),year(sale_date);"""
     df = pd.read_sql(query, mysql_engine)
     df.to_sql("monthly_sales_summary_source", mysql_engine, index=False, if_exists='replace')
 
@@ -33,12 +33,12 @@ def Transform_aggregator_inventory_level():
     df.to_sql("aggregated_inventory_level", mysql_engine, index=False, if_exists='replace')
 
 def Transform_joiner_sale_data():
-    query = """select fs.sales_id as sales_id_sales,fs.quantity as 
-    quantiy_sales,fs.price,fs.quantity*fs.price as total_amount,p.product_id,
+    query = """select fs.sales_id,fs.quantity,fs.sale_date,fs.price,fs.quantity*fs.price as total_sales,p.product_id,
     p.product_name,s.store_id,s.store_name
     from filtered_sales_data as fs  
     inner join staging_product as p on p.product_id = fs.product_id
-    inner join staging_stores as s on s.store_id = fs.store_id"""
+    inner join staging_stores as s on s.store_id = fs.store_id
+    """
     df = pd.read_sql(query, mysql_engine)
     df.to_sql("sales_with_details", mysql_engine, index=False, if_exists='replace')
 

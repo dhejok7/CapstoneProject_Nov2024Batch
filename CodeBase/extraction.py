@@ -1,13 +1,37 @@
+
+'''
+# Assignent 1 : Pleae complete the fucntions for all the other sources in the below format
+def extract_sales_data_csv(file_path,table_name,db_engine):
+    print("Extrcation started for sales_data..")
+    df = pd.read_csv(file_path)
+    df.to_sql(table_name, db_engine, index=False, if_exists='replace')
+    print("Extrcation completed for sales_data..")
+if __name__ == "__main__":
+    extract_sales_data_csv("SourceData/sales_data.csv","staging_sales",mysql_engine)
+
+2. Implement logger fucntionality in extarction and transformation scripts
+3. Implement the try ..except for exception handling.
+
+'''
+
+
+
+
+
+
+
 import pandas as pd
 from sqlalchemy import create_engine
-import cx_Oracle
-import logging
+from Config.config import *
 
 # Create mysql engine
-mysql_engine = create_engine('mysql+pymysql://root:Admin%40143@localhost:3308/retaildwh')
+#mysql_engine = create_engine('mysql+pymysql://root:Admin%40143@localhost:3308/retaildwh')
+
+mysql_engine = create_engine(f'mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}')
 
 # Create Oracle engine
-oracle_engine = create_engine('oracle+cx_oracle://system:admin@localhost:1521/xe')
+#oracle_engine = create_engine('oracle+cx_oracle://system:admin@localhost:1521/xe')
+oracle_engine = create_engine(f'oracle+cx_oracle://{ORACLE_USER}:{ORACLE_PASSWORD}@{ORACLE_HOST}:{ORACLE_PORT}/{ORACLE_SERVICE}')
 
 def extract_sales_data_csv():
     print("Extrcation started for sales_data..")
@@ -43,17 +67,3 @@ if __name__ == "__main__":
     extract_inventory_data_xml()
     extract_store_data_oracle() 
 
-
-'''
-# Assignent : Pleae complete the fucntions for all the other sources in the below format
-def extract_sales_data_csv(file_path,table_name,db_engine):
-    print("Extrcation started for sales_data..")
-    df = pd.read_csv(file_path)
-    df.to_sql(table_name, db_engine, index=False, if_exists='replace')
-    print("Extrcation completed for sales_data..")
-
-
-if __name__ == "__main__":
-    extract_sales_data_csv("SourceData/sales_data.csv","staging_sales",mysql_engine)
-
-'''
