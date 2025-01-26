@@ -1,4 +1,3 @@
-
 '''
 # Assignent 1 : Pleae complete the fucntions for all the other sources in the below format
 def extract_sales_data_csv(file_path,table_name,db_engine):
@@ -11,6 +10,8 @@ if __name__ == "__main__":
 
 2. Implement logger fucntionality in extarction and transformation scripts
 3. Implement the try ..except for exception handling.
+4. Wrap the entire extraction,transformation and loading part in a single script
+   called "etl_job.py" and this job should take care all the ETL process.
 
 '''
 
@@ -60,10 +61,10 @@ def extract_store_data_oracle():
     df = pd.read_sql(query,oracle_engine)
     df.to_sql("staging_stores",mysql_engine,index=False,if_exists='replace')
 
+
 if __name__ == "__main__":
     extract_sales_data_csv()
     extract_product_data_csv()
     extract_supplier_data_json()
     extract_inventory_data_xml()
-    extract_store_data_oracle() 
-
+    extract_store_data_oracle()
